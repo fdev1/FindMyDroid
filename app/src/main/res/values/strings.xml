@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Find My Droid</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="strEnable">Enable Service</string>
+    <string name="title_activity_about">About Find My Droid</string>
+</resources>

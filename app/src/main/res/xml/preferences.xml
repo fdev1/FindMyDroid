@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="SMS">
+        <CheckBoxPreference
+            android:key="pref_sms_enabled"
+            android:title="SMS Find"
+            android:summary="Enable SMS location request"
+            android:defaultValue="false" />
+        <EditTextPreference
+            android:dependency="pref_sms_enabled"
+            android:key="pref_sms_track_msg"
+            android:title="SMS Find Message"
+            android:summary="Message to request location via SMS"
+            android:defaultValue="FindMyDroid" />
+        <CheckBoxPreference
+            android:key="pref_sms_tracking"
+            android:title="SMS Tracking"
+            android:summary="Enable SMS Tracking"
+            android:defaultValue="false" />
+        <EditTextPreference
+            android:dependency="pref_sms_tracking"
+            android:title="SMS Tracking Message"
+            android:summary="Message to request SMS tracking"
+            android:defaultValue="TrackMyDroid" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Advanced">
+        <EditTextPreference
+            android:key="pref_track_server"
+            android:title="Track Server"
+            android:summary="Track Server URL"
+            android:defaultValue="http://findmydroid.com" />
+    </PreferenceCategory>
+</PreferenceScreen>
