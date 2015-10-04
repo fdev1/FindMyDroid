@@ -1,6 +1,20 @@
 <?php
 
 header('Content-type: application/json');
+define('GCLOUD', false);
+
+if (GCLOUD)
+{
+	define('HAVE_FLOCK', false);
+	define('TEMPDIR', 'gs://findmydroid-1086.appspot.com/');
+	define('FILEMODE_X', 'w');
+}
+else
+{
+	define('HAVE_FLOCK', true);
+	define('TEMPDIR', '/tmp/');
+	define('FILEMODE_X', 'x');
+}
 
 function gen_cookie()
 {
@@ -16,7 +30,7 @@ function gen_cookie()
 
 function get_cookie_filename($cookie)
 {
-	return "/tmp/" . $cookie . "-fmd";
+	return TEMPDIR . $cookie;
 }
 
 function begin_session()
@@ -33,7 +47,7 @@ function begin_session()
 			$filename = get_cookie_filename($cookie);
 		}
 		while (file_exists($filename));
-		$f = fopen($filename, 'x');
+		$f = fopen($filename, FILEMODE_X);
 		$retries++;
 	}
 	while (!$f && $retries < 4);
@@ -41,9 +55,9 @@ function begin_session()
 	if (!$f)
 	{
 		$result["result"] = "FAIL";
-		$result["reason"] = "Cannot open file.";
+		$result["reason"] = "Cannot open file: " . $filename;
 	}
-	else if (flock($f, LOCK_EX))
+	else if (!HAVE_FLOCK || flock($f, LOCK_EX))
 	{
 		fwrite($f, "0.00\n0.00\n");
 		fclose($f);
@@ -76,7 +90,7 @@ function set_location($cookie, $latitude, $longitude)
 			$result["result"] = "FAIL";
 			$result["reason"] = "Invalid cookie";
 		}
-		else if (flock($f, LOCK_EX))
+		else if (!HAVE_FLOCK || flock($f, LOCK_EX))
 		{
 			fwrite($f, $latitude . "\n");
 			fwrite($f, $longitude . "\n");
@@ -109,7 +123,7 @@ function get_location($cookie)
 			$result["result"] = "FAIL";
 			$result["reason"] = "Could not open file";
 		}
-		else if (flock($f, LOCK_EX))
+		else if (!HAVE_FLOCK || flock($f, LOCK_EX))
 		{
 			$result["result"] = "OK";
 			$result["latitude"] = trim(fgets($f));
