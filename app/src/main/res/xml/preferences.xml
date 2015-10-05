@@ -8,7 +8,7 @@
             android:defaultValue="false" />
         <EditTextPreference
             android:dependency="pref_sms_enabled"
-            android:key="pref_sms_track_msg"
+            android:key="pref_sms_find_msg"
             android:title="SMS Find Message"
             android:summary="Message to request location via SMS"
             android:defaultValue="FindMyDroid" />
@@ -19,6 +19,7 @@
             android:defaultValue="false" />
         <EditTextPreference
             android:dependency="pref_sms_tracking"
+            android:key="pref_sms_track_msg"
             android:title="SMS Tracking Message"
             android:summary="Message to request SMS tracking"
             android:defaultValue="TrackMyDroid" />
@@ -28,6 +29,12 @@
             android:key="pref_track_server"
             android:title="Track Server"
             android:summary="Track Server URL"
-            android:defaultValue="http://findmydroid.com" />
+            android:defaultValue="https://findmydroid-1086.appspot.com" />
+        <ListPreference
+            android:key="pref_update_interval"
+            android:title="Update Interval"
+            android:summary="Interval for submitting location updates in seconds."
+            android:entries="@array/update_interval"
+            android:entryValues="@array/update_interval_values" />
     </PreferenceCategory>
 </PreferenceScreen>

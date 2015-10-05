@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -22,7 +23,9 @@ public class SmsHandler extends BroadcastReceiver
         final Bundle bundle = intent.getExtras();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         final boolean findEnabled = sharedPref.getBoolean("pref_sms_enabled", false);
-        final String findMessage = sharedPref.getString("pref_sms_track_msg", "");
+        final boolean trackEnabled = sharedPref.getBoolean("pref_sms_tracking", false);
+        final String findMessage = sharedPref.getString("pref_sms_find_msg", "");
+        final String trackMessage = sharedPref.getString("pref_sms_track_msg", "");
 
         Log.d("SmsHandler", "onReceive() called.");
 
@@ -54,6 +57,24 @@ public class SmsHandler extends BroadcastReceiver
                         {
                             Log.d("SmsHandler", "Sms<" + sender + ">: " + text);
                             SmsSender.sendLocation(context, sender);
+                        }
+                    }
+                    else if (trackEnabled && text.equals(trackMessage))
+                    {
+                        final String cookie = LocationTracker.startTracking(context);
+                        if (!cookie.equals(""))
+                        {
+                            final SmsManager sms = SmsManager.getDefault();
+                            final String host = sharedPref.getString("pref_track_server", "");
+                            final String resp = String.format("%s?action=get_location&cookie=%s",
+                                    host, cookie);
+                            sms.sendTextMessage(sender, null, resp, null, null);
+                            Log.d("SmsHandler", "Cookie: " + cookie);
+                            Log.d("SmsHandler", "Response: " + resp);
+                        }
+                        else
+                        {
+                            Log.d("SmsHandler", "Could not start tracking.");
                         }
                     }
                 }
