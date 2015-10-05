@@ -1,6 +1,6 @@
 var lat = 44.5403;
 var lon= -78.5463;
-var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+var iconBase = 'http://fernando-rodriguez.github.io/FindMyDroid/images/';
 var marker;
 var map;
 var pos;
@@ -27,8 +27,6 @@ function updateMap()
 
 	if (qstring["cookie"] == null)
 		return;
-	if (qstring["action"] == "stop")
-		return;
 
 	$.ajax({
 		url: "http://findmydroid-1086.appspot.com/?action=get_location&cookie=" + qstring["cookie"]
@@ -50,19 +48,19 @@ function updateMap()
 
 function initialize()
 {
-	pos = new google.maps.LatLng(44.5403, -78.5463);
+	pos = new google.maps.LatLng(34.5403, -100.5463);
 	var mapCanvas = document.getElementById('map');
 	var mapOptions = 
 	{
 		center: pos,
-		zoom: 1,
+		zoom: 2,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	}
 	map = new google.maps.Map(mapCanvas, mapOptions);
 	marker = new google.maps.Marker({
 		position: pos,
 		map: map,
-		icon: iconBase + 'schools_maps.png'
+		icon: iconBase + 'droid.png'
 	});
 	setTimeout(updateMap, 10000);
 }
