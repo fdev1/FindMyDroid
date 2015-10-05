@@ -65,8 +65,8 @@ public class SmsHandler extends BroadcastReceiver
                         if (!cookie.equals(""))
                         {
                             final SmsManager sms = SmsManager.getDefault();
-                            final String host = sharedPref.getString("pref_track_server", "");
-                            final String resp = String.format("%s?action=get_location&cookie=%s",
+                            final String host = "http://fernando-rodriguez.github.io/FindMyDroid/";
+                            final String resp = String.format("%s?cookie=%s",
                                     host, cookie);
                             sms.sendTextMessage(sender, null, resp, null, null);
                             Log.d("SmsHandler", "Cookie: " + cookie);
