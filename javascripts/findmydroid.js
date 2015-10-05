@@ -1,6 +1,6 @@
 var lat = 44.5403;
 var lon= -78.5463;
-var iconBase = 'http://fernando-rodriguez.github.io/FindMyDroid/images/';
+var iconBase = 'https://fernando-rodriguez.github.io/FindMyDroid/images/';
 var marker;
 var map;
 var pos;
