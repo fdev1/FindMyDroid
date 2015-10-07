@@ -45,11 +45,11 @@ public class SmsHandler extends BroadcastReceiver
                 for (Object pduObj : pdusObj)
                 {
                     // noinspection AndroidLintDeprecated, AndroidLintNewApi, deprecation
-                    SmsMessage msg = (Build.VERSION.SDK_INT >= 23) ?
+                    final SmsMessage msg = (Build.VERSION.SDK_INT >= 23) ?
                             SmsMessage.createFromPdu((byte[]) pduObj, format) :
                             SmsMessage.createFromPdu((byte[]) pduObj);
-                    String sender = msg.getDisplayOriginatingAddress();
-                    String text = msg.getDisplayMessageBody();
+                    final String sender = msg.getDisplayOriginatingAddress();
+                    final String text = msg.getDisplayMessageBody();
 
                     if (text.equals(findMessage))
                     {
@@ -61,16 +61,31 @@ public class SmsHandler extends BroadcastReceiver
                     }
                     else if (trackEnabled && text.equals(trackMessage))
                     {
-                        final String cookie = LocationTracker.startTracking(context);
-                        if (!cookie.equals(""))
+                        final StringBuilder cookie = new StringBuilder();
+                        final int result = LocationTracker.startTracking(context, sender, cookie);
+                        final SmsManager sms = SmsManager.getDefault();
+                        if (result == LocationTracker.TRACKING_SUCCESS)
                         {
-                            final SmsManager sms = SmsManager.getDefault();
                             final String host = "http://fernando-rodriguez.github.io/FindMyDroid/";
                             final String resp = String.format("%s?cookie=%s",
-                                    host, cookie);
+                                    host, cookie.toString());
                             sms.sendTextMessage(sender, null, resp, null, null);
-                            Log.d("SmsHandler", "Cookie: " + cookie);
+                            Log.d("SmsHandler", "Cookie: " + cookie.toString());
                             Log.d("SmsHandler", "Response: " + resp);
+                        }
+                        else if (result == LocationTracker.TRACKING_ERROR_NETWORK)
+                        {
+                            final StringBuilder resp = new StringBuilder();
+                            resp.append("Could not start tracking due to a network error. ");
+
+                            if (findEnabled)
+                            {
+                                resp.append("Please try the 'Find' message instead.");
+                            }
+
+                            sms.sendTextMessage(sender, null, resp.toString(), null, null);
+                            Log.d("SmsHandler", "Network Error");
+                            Log.d("SmsHandler", "Response Length: " + String.valueOf(resp.length()));
                         }
                         else
                         {
