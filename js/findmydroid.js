@@ -63,7 +63,7 @@ function updateMap()
 			if (isConnected == false)
 			{
 				isConnected = true;
-				map.controls[google.maps.ControlPosition.TOP_LEFT].push(disconnectDiv);
+				map.controls[google.maps.ControlPosition.TOP_RIGHT].push(disconnectDiv);
 			}
 		});
 	}
@@ -107,8 +107,8 @@ function initialize()
 	border.style.backgroundColor = '#fff';
 	border.style.border = '1px solid #fff';
 	border.style.cursor = 'pointer';
-	border.style.marginTop = '50px';
-	border.style.marginLeft = '10px';
+	border.style.marginTop = '10px';
+	border.style.marginRight = '10px';
 	border.style.textAlign = 'center';
 	border.title = 'Click to disconnect';
 	border.appendChild(ctlText);
