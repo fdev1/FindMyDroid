@@ -130,3 +130,18 @@ function initialize()
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
+var delayjs = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+$(window).resize(function () {
+	delayjs(function () {
+		if (map != null)
+			map.setCenter(pos);
+	}, 500);
+});
+
