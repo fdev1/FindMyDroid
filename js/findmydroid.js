@@ -28,9 +28,9 @@ var disconnectDiv;
 
 function endSession()
 {
+	map.controls[google.maps.ControlPosition.TOP_RIGHT].pop(disconnectDiv);
 	$.ajax({ url: svcUrl + '?action=end_session&cookie=' + qstring["cookie"] });
 	pos = new google.maps.LatLng(34.5403, -100.5463);
-	map.controls[google.maps.ControlPosition.TOP_LEFT].pop(disconnectDiv);
 	map.setCenter(pos);
 	map.setZoom(2);
 	marker.setMap(null);
