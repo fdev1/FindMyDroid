@@ -15,3 +15,14 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#-keep public class com.google.android.gms.**
+#-dontwarn com.google.android.gms.**
+
+-keep class com.google.android.gms.internal.zzacc
+-keepclassmembers class com.google.android.gms.internal.zzw {
+    addHeader(java.lang.String,java.lang.String);
+    setURI(java.net.URI);
+}
+#-dontwarn com.google.android.gms.internal.zzac
+#-dontwarn com.google.android.gms.internal.ssw
